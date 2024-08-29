@@ -103,7 +103,7 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-        <Stack screenOptions={{ headerShown: false }} >
+        <Stack screenOptions={{ headerShown: false, animation: 'ios' }} >
           <Stack.Screen name="index" />
           <Stack.Screen name="(tabs)" />
         </Stack>

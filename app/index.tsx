@@ -61,7 +61,6 @@ export default function Page() {
   }, [isLoaded, emailAddress, password])
 
   return (
-    <View>
      <ImageBackground className='m-2' source={require('~/assets/images/logo.png')}>
       <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
         <Card className="w-full max-w-md">
@@ -96,17 +95,10 @@ export default function Page() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
             <Button className='w-full' variant="default" onPress={onSignInPress}><Text>Acessar</Text></Button>
-            <Link href='/sign-up' className='text-center text-sm'>Não tem uma conta? Registre-se</Link>
+            <Button className='w-full' variant="link" onPress={() => router.push('/sign-up')}><Text>Não tem uma conta? Registre-se</Text></Button>
           </CardFooter>
         </Card>
       </View>
     </ImageBackground>
-      <View>
-        <Text>Don't have an account?</Text>
-        <Link href="/sign-up">
-          <Text>Sign up</Text>
-        </Link>
-      </View>
-    </View>
   )
 }

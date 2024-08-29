@@ -7,7 +7,6 @@ import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text } from '~/components/ui/text'
-import { Label } from '~/components/ui/label'
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp()
@@ -130,7 +129,9 @@ export default function SignUpScreen() {
               </CardContent>
               <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
                 <Button className='w-full' variant="default" onPress={onSignUpPress} ><Text>Registrar</Text></Button>
-                <Link href='/' className='text-center text-sm'>Já tem uma conta? Entrar</Link>
+                <Button className='w-full' variant="link" onPress={() => router.back()}>
+                  <Text>Já possui uma conta? Entrar</Text>
+                </Button>
               </CardFooter>
             </Card>
           </View>
@@ -147,10 +148,10 @@ export default function SignUpScreen() {
                 </CardDescription>
               </CardHeader>
             <CardContent className="space-y-4 gap-5">
-              <Input nativeID='code' className='w-full' value={code} placeholder="Código de verificação" onChangeText={(code) => setCode(code)} />
+            <Input nativeID='code' className={theme === 'dark' ? 'color-white w-full' : 'w-full'} value={code} placeholder="Código de verificação" onChangeText={(code) => setCode(code)} />
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
-              <Button className='w-full' variant="default" onPress={onSignUpPress} ><Text>Concluir</Text></Button>
+              <Button className='w-full' variant="default" onPress={onSignUpPress}><Text>Confirmar Código</Text></Button>
             </CardFooter>
             </Card>
           </View>
