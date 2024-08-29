@@ -16,6 +16,7 @@ const LIGHT_THEME: Theme = {
   dark: false,
   colors: NAV_THEME.light,
 };
+
 const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
@@ -67,13 +68,7 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
       <Stack>
-        <Stack.Screen
-          name='index'
-          options={{
-            title: 'Starter Base',
-            headerRight: () => <ThemeToggle />,
-          }}
-        />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
       <PortalHost />
     </ThemeProvider>
