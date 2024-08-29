@@ -1,17 +1,27 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Link, useRouter } from 'expo-router';
-import React, { useEffect } from 'react';
-import { ImageBackground, View } from 'react-native';
-import { Button } from '~/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
-import { Input } from '~/components/ui/input';
-import { Text } from '~/components/ui/text';
+import { useAuth, useSignIn } from '@clerk/clerk-expo'
+import { Link, useRouter } from 'expo-router'
+import { View, ImageBackground } from 'react-native'
+import React, { useEffect } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
+import { Input } from '~/components/ui/input'
+import { Button } from '~/components/ui/button'
+import { Text } from '~/components/ui/text'
 
-export default function Login() {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+export default function Page() {
+  const { signIn, setActive, isLoaded } = useSignIn()
+  const router = useRouter()
+  const {isSignedIn} = useAuth()
+
+  const [emailAddress, setEmailAddress] = React.useState('')
+  const [password, setPassword] = React.useState('')
   const [theme, setColorScheme] = React.useState('light');
-  const router = useRouter();
+
+  useEffect(() => {
+    if (isSignedIn) {
+      router.navigate('/(tabs)/home')
+    }
+  }, [isSignedIn])
 
   useEffect(() => {
     const getTheme = async () => {
@@ -25,30 +35,33 @@ export default function Login() {
     getTheme();
   }, []);
 
-  const onChangeEmail = (text: string) => {
-    setEmail(text);
-  };
-
-  const onChangePassword = (text: string) => {
-    setPassword(text);
-  };
-
-  const onLogin = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const emailValid = emailRegex.test(email);    
-
-    if (!emailValid) {3
-      alert('Email inválido');
-      return;
+  const onSignInPress = React.useCallback(async () => {
+    if (!isLoaded) {
+      return
     }
 
-    router.push('/(tabs)');
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: emailAddress,
+        password,
+      })
 
-    
-  }
+      if (signInAttempt.status === 'complete') {
+        await setActive({ session: signInAttempt.createdSessionId })
+        router.replace('/(tabs)')
+      } else {
+        // See https://clerk.com/docs/custom-flows/error-handling
+        // for more info on error handling
+        console.error(JSON.stringify(signInAttempt, null, 2))
+      }
+    } catch (err: any) {
+      console.error(JSON.stringify(err, null, 2))
+    }
+  }, [isLoaded, emailAddress, password])
 
   return (
-    <ImageBackground className='m-2' source={require('~/assets/images/logo.png')}>
+    <View>
+     <ImageBackground className='m-2' source={require('~/assets/images/logo.png')}>
       <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
@@ -61,9 +74,9 @@ export default function Login() {
             <Input
               className={theme === 'dark' ? 'color-white' : ''}
               placeholder='email@ingresso.com'
-              value={email}
+              value={emailAddress}
               keyboardType='email-address'
-              onChangeText={onChangeEmail}
+              onChangeText={setEmailAddress}
               aria-labelledby='emailLabel'
               autoCapitalize='none'
               autoComplete='email'
@@ -73,7 +86,7 @@ export default function Login() {
               className={theme === 'dark' ? 'color-white' : ''}
               placeholder='Password'
               value={password}
-              onChangeText={onChangePassword}
+              onChangeText={setPassword}
               secureTextEntry
               aria-labelledby='passwordLabel'
               autoCapitalize='none'
@@ -81,11 +94,18 @@ export default function Login() {
             />
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
-            <Button className='w-full' variant="default" onPress={onLogin} ><Text>Acessar</Text></Button>
-            <Link href='/register' className='text-center text-sm'>Não tem uma conta? Registre-se</Link>
+            <Button className='w-full' variant="default" onPress={onSignInPress}><Text>Acessar</Text></Button>
+            <Link href='/sign-up' className='text-center text-sm'>Não tem uma conta? Registre-se</Link>
           </CardFooter>
         </Card>
       </View>
     </ImageBackground>
+      <View>
+        <Text>Don't have an account?</Text>
+        <Link href="/sign-up">
+          <Text>Sign up</Text>
+        </Link>
+      </View>
+    </View>
   )
 }
