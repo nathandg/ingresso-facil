@@ -55,6 +55,7 @@ export default function Page() {
         console.error(JSON.stringify(signInAttempt, null, 2))
       }
     } catch (err: any) {
+      alert(err.errors[0].longMessage);
       console.error(JSON.stringify(err, null, 2))
     }
   }, [isLoaded, emailAddress, password])

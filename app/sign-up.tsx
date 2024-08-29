@@ -16,7 +16,7 @@ export default function SignUpScreen() {
   const [emailAddress, setEmailAddress] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [repeatPassword, setRepeatPassword] = React.useState('')
-  const [pendingVerification, setPendingVerification] = React.useState(true)
+  const [pendingVerification, setPendingVerification] = React.useState(false)
   const [code, setCode] = React.useState('')
   const [theme, setColorScheme] = React.useState('light');
 
