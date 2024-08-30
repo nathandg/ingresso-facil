@@ -1,5 +1,5 @@
-import { Link, useRouter } from "expo-router";
-import { View, ImageBackground, ActivityIndicator } from "react-native";
+import { useRouter } from "expo-router";
+import { View, ActivityIndicator } from "react-native";
 import React, { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -31,7 +31,7 @@ export default function Page() {
         auth.onAuthStateChanged(async (user) => {
           if (user) {
             console.log("User is signed in", user);
-            router.replace("/(tabs)/home");
+            router.replace("/(tabs)/movies");
           }
           setLoading(false);
         });
@@ -64,7 +64,7 @@ export default function Page() {
         emailAddress,
         password
       );
-      if (user) router.replace("/(tabs)/home");
+      if (user) router.replace("/(tabs)/movies");
     } catch (error: any) {
       console.log(error);
       alert("Sign in failed: " + error.message);
@@ -82,61 +82,52 @@ export default function Page() {
   }
 
   return (
-    <ImageBackground
-      className="m-2"
-      source={require("~/assets/images/logo.png")}
-    >
-      <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold mb-3 text-center">
-              Entrar
-            </CardTitle>
-            <CardDescription className="text-center text-md">
-              Insira suas credencias do Ingresso Fácil para continuar
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 gap-5">
-            <Input
-              className={theme === "dark" ? "color-white" : ""}
-              placeholder="email@ingresso.com"
-              value={emailAddress}
-              keyboardType="email-address"
-              onChangeText={setEmailAddress}
-              aria-labelledby="emailLabel"
-              autoCapitalize="none"
-              autoComplete="email"
-            />
+    <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold mb-3 text-center">
+            Entrar
+          </CardTitle>
+          <CardDescription className="text-center text-md">
+            Insira suas credencias do Ingresso Fácil para continuar
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 gap-5">
+          <Input
+            className={theme === "dark" ? "color-white" : ""}
+            placeholder="email@ingresso.com"
+            value={emailAddress}
+            keyboardType="email-address"
+            onChangeText={setEmailAddress}
+            aria-labelledby="emailLabel"
+            autoCapitalize="none"
+            autoComplete="email"
+          />
 
-            <Input
-              className={theme === "dark" ? "color-white" : ""}
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              aria-labelledby="passwordLabel"
-              autoCapitalize="none"
-              autoComplete="password"
-            />
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
-            <Button
-              className="w-full"
-              variant="default"
-              onPress={onSignInPress}
-            >
-              <Text>Acessar</Text>
-            </Button>
-            <Button
-              className="w-full"
-              variant="link"
-              onPress={() => router.push("/sign-up")}
-            >
-              <Text>Não tem uma conta? Registre-se</Text>
-            </Button>
-          </CardFooter>
-        </Card>
-      </View>
-    </ImageBackground>
+          <Input
+            className={theme === "dark" ? "color-white" : ""}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            aria-labelledby="passwordLabel"
+            autoCapitalize="none"
+            autoComplete="password"
+          />
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
+          <Button className="w-full" variant="default" onPress={onSignInPress}>
+            <Text>Acessar</Text>
+          </Button>
+          <Button
+            className="w-full"
+            variant="link"
+            onPress={() => router.push("/sign-up")}
+          >
+            <Text>Não tem uma conta? Registre-se</Text>
+          </Button>
+        </CardFooter>
+      </Card>
+    </View>
   );
 }

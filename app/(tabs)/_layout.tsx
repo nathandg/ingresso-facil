@@ -5,7 +5,7 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="home"
+        name="movies"
         options={{
           title: "Filmes",
           tabBarIcon: ({ color }) => <Film size={28} color={color} />,
