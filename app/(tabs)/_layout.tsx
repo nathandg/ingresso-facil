@@ -7,15 +7,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Filmes',
+          title: "Filmes",
           tabBarIcon: ({ color }) => <Film size={28} color={color} />,
-        }} />      
-        <Tabs.Screen
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
-          title: 'Perfil',
+          title: "Perfil",
           tabBarIcon: ({ color }) => <User2Icon size={28} color={color} />,
-        }} />      
+        }}
+      />
     </Tabs>
-  )
+  );
 }
