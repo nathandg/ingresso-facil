@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, ImageBackground } from "react-native";
 import { useRouter } from "expo-router";
 import {
   Card,
@@ -64,7 +64,7 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View>
+    <ImageBackground source={require('~/assets/images/logo.png')} >
       <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
@@ -125,6 +125,6 @@ export default function SignUpScreen() {
           </CardFooter>
         </Card>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
