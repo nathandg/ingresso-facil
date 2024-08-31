@@ -1,6 +1,8 @@
-import * as React from "react";
-import { View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import * as React from "react";
+import { ActivityIndicator, ImageBackground, View } from "react-native";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,11 +12,9 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "~/components/ui/text";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "~/firebase-config";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function SignUpScreen() {
   const auth = FIREBASE_AUTH;
@@ -23,20 +23,8 @@ export default function SignUpScreen() {
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [repeatPassword, setRepeatPassword] = React.useState("");
-  const [theme, setColorScheme] = React.useState("light");
   const [loading, setLoading] = React.useState(false);
-
-  React.useEffect(() => {
-    const getTheme = async () => {
-      const theme = await AsyncStorage.getItem("theme");
-      if (theme === "dark") {
-        setColorScheme("dark");
-      } else {
-        setColorScheme("light");
-      }
-    };
-    getTheme();
-  }, []);
+  const {isDarkColorScheme} = useColorScheme();
 
   const onSignUpPress = React.useCallback(async () => {
     try {
@@ -64,7 +52,7 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View>
+    <ImageBackground source={require('~/assets/images/logo.png')} >
       <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
@@ -77,7 +65,7 @@ export default function SignUpScreen() {
           </CardHeader>
           <CardContent className="space-y-4 gap-5">
             <Input
-              className={theme === "dark" ? "color-white" : ""}
+              className={isDarkColorScheme ? "color-white" : ""}
               placeholder="email@ingresso.com"
               value={emailAddress}
               keyboardType="email-address"
@@ -87,7 +75,7 @@ export default function SignUpScreen() {
               autoComplete="email"
             />
             <Input
-              className={theme === "dark" ? "color-white" : ""}
+              className={isDarkColorScheme ? "color-white" : ""}
               placeholder="Senha"
               value={password}
               onChangeText={setPassword}
@@ -97,7 +85,7 @@ export default function SignUpScreen() {
               autoComplete="password"
             />
             <Input
-              className={theme === "dark" ? "color-white" : ""}
+              className={isDarkColorScheme ? "color-white" : ""}
               placeholder="Repetir Senha"
               value={repeatPassword}
               onChangeText={setRepeatPassword}
@@ -125,6 +113,6 @@ export default function SignUpScreen() {
           </CardFooter>
         </Card>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
