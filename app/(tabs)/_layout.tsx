@@ -1,24 +1,21 @@
 import { Tabs } from "expo-router";
-import { Film, User2Icon } from "lucide-react-native";
+import { Film, Home, User2Icon } from "lucide-react-native";
 
 export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="movies"
+        name="index"
         options={{
-          title: "Filmes",
+          title: 'Filmes',
           tabBarIcon: ({ color }) => <Film size={28} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
+        }} />      
+        <Tabs.Screen
+        name="MoviesScreen"
         options={{
-          title: "Meu Perfil",
+          title: 'Perfil',
           tabBarIcon: ({ color }) => <User2Icon size={28} color={color} />,
-          unmountOnBlur: true,
-        }}
-      />
+        }} />      
     </Tabs>
-  );
+  )
 }
