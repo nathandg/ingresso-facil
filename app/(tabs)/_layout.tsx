@@ -16,6 +16,7 @@ export default function TabLayout() {
         options={{
           title: "Meu Perfil",
           tabBarIcon: ({ color }) => <User2Icon size={28} color={color} />,
+          unmountOnBlur: true,
         }}
       />
     </Tabs>

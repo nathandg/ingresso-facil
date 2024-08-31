@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
-import { View, ActivityIndicator, ImageBackground } from "react-native";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator, ImageBackground, View } from "react-native";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,10 +12,9 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { FIREBASE_AUTH } from "~/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Page() {
   const auth = FIREBASE_AUTH;
@@ -22,8 +22,8 @@ export default function Page() {
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [theme, setColorScheme] = React.useState("light");
   const [loading, setLoading] = React.useState(true);
+  const { isDarkColorScheme } = useColorScheme();
 
   useEffect(() => {
     const checkAuthState = async () => {
@@ -44,17 +44,6 @@ export default function Page() {
     checkAuthState();
   }, [auth, router]);
 
-  useEffect(() => {
-    const getTheme = async () => {
-      const theme = await AsyncStorage.getItem("theme");
-      if (theme === "dark") {
-        setColorScheme("dark");
-      } else {
-        setColorScheme("light");
-      }
-    };
-    getTheme();
-  }, []);
 
   const onSignInPress = React.useCallback(async () => {
     try {
@@ -95,7 +84,7 @@ export default function Page() {
           </CardHeader>
           <CardContent className="space-y-4 gap-5">
             <Input
-              className={theme === "dark" ? "color-white" : ""}
+              className={isDarkColorScheme ? "color-white" : ""}
               placeholder="email@ingresso.com"
               value={emailAddress}
               keyboardType="email-address"
@@ -106,7 +95,7 @@ export default function Page() {
             />
 
             <Input
-              className={theme === "dark" ? "color-white" : ""}
+              className={isDarkColorScheme ? "color-white" : ""}
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
