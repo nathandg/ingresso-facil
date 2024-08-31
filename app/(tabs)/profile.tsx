@@ -11,5 +11,5 @@ export default function MoviesScreen() {
         <P>Here you can see all the movies you have watched.</P>
       </CardContent>
     </Card>
-  )
+  );
 }
