@@ -27,7 +27,6 @@ export default function MovieDetails() {
 
   return (
     <Card>
-      <Stack.Screen options={{ headerShown: false }} />
       <CardHeader>
         <CardTitle>Movies Details</CardTitle>
         <CardDescription>

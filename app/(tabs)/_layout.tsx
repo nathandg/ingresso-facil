@@ -14,9 +14,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Meu Perfil",
+          title: "Perfil",
           tabBarIcon: ({ color }) => <User2Icon size={28} color={color} />,
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
         }}
       />
     </Tabs>
