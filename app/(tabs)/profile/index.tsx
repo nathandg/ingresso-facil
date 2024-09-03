@@ -7,7 +7,7 @@ import { Text } from '~/components/ui/text';
 import { FIREBASE_AUTH } from '~/firebase-config';
 import { UserCircle2 } from '~/lib/icons/UserCircle2';
 
-export default function Component() {
+export default function ProfileScreen() {
 
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
