@@ -14,7 +14,6 @@ import {
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 import { FIREBASE_AUTH } from "~/firebase-config";
-import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function Page() {
   const auth = FIREBASE_AUTH;
@@ -69,7 +68,6 @@ export default function Page() {
   }
 
   return (
-    // <ImageBackground source={require('~/assets/images/logo.png')} >
     <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
@@ -119,6 +117,5 @@ export default function Page() {
         </CardFooter>
       </Card>
     </View>
-    // </ImageBackground>
   );
 }
