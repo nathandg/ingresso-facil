@@ -40,8 +40,8 @@ const MovieCard: React.FC<MovieCardProps> = React.memo(({ movie }) => (
         </Text>
       </View>
       <View>
-        <Text className="text-gray-500">Duração: {movie.duration}</Text>
-        <Text className="text-gray-500">
+        <Text className="text-primary opacity-50">Duração: {movie.duration}</Text>
+        <Text className="text-primary opacity-50">
           Classificação: {movie.classification}
         </Text>
       </View>
