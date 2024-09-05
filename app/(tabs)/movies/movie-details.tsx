@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Clapperboard } from "~/lib/icons/Clapperboard";
 
 export default function MovieDetails() {
   const [movie, setMovie] = useState<MovieCardProps["movie"] | null>(null);
@@ -90,61 +91,75 @@ export default function MovieDetails() {
 
           <View className="w-full">
             <Card className="bg-primary-foreground mx-2 mb-12 border border-border">
-              <CardHeader className="bg-primary-foreground border-b border-border items-center">
-                <Text className="text-xl font-bold">Catuai Shopping</Text>
+              <CardHeader className="border-b border-border flex-row justify-center mb-4">
+                <Text className="text-lg font-semibold text-primary">
+                  Boulervard Shopping
+                </Text>
               </CardHeader>
               <CardContent className="flex-row justify-between">
                 <View className="flex-1 flex-col justify-start gap-4">
-                  <View>
-                    <Text className="text-lg font-bold py-4">
-                      Normal - Dublado
-                    </Text>
+                  <View className="mb-4">
+                    <View className="flex-row justify-start gap-2 items-center">
+                      <Clapperboard
+                        className="text-primary opacity-80"
+                        size={24}
+                      />
+                      <Text className="text-base font-semibold py-4 text-primary">
+                        Normal - Dublado
+                      </Text>
+                    </View>
                     <View className="flex-row justify-start gap-4 flex-wrap">
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">15:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">16:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">17:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">18:00</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
                   </View>
 
-                  <View>
-                    <Text className="text-lg font-bold py-4">
-                      Normal - Legendado
-                    </Text>
+                  <View className="mb-4">
+                    <View className="flex-row justify-start gap-2 items-center">
+                      <Clapperboard
+                        className="text-primary opacity-80"
+                        size={24}
+                      />
+                      <Text className="text-base font-semibold py-4 text-primary">
+                        Normal - Legendado
+                      </Text>
+                    </View>
                     <View className="flex-row justify-start gap-4 flex-wrap">
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">15:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">16:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">17:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">18:00</Text>
                         </TouchableOpacity>
                       </View>
@@ -155,61 +170,75 @@ export default function MovieDetails() {
             </Card>
 
             <Card className="bg-primary-foreground mx-2 mb-12 border border-border">
-              <CardHeader className="bg-primary-foreground border-b border-border items-center">
-                <Text className="text-xl font-bold">Catuai Shopping</Text>
+              <CardHeader className="border-b border-border flex-row justify-center mb-4">
+                <Text className="text-lg font-semibold text-primary">
+                  Catuaí Shopping
+                </Text>
               </CardHeader>
               <CardContent className="flex-row justify-between">
                 <View className="flex-1 flex-col justify-start gap-4">
-                  <View>
-                    <Text className="text-lg font-bold py-4">
-                      Normal - Dublado
-                    </Text>
+                  <View className="mb-4">
+                    <View className="flex-row justify-start gap-2 items-center">
+                      <Clapperboard
+                        className="text-primary opacity-80"
+                        size={24}
+                      />
+                      <Text className="text-base font-semibold py-4 text-primary">
+                        Normal - Dublado
+                      </Text>
+                    </View>
                     <View className="flex-row justify-start gap-4 flex-wrap">
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">15:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">16:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">17:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">18:00</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
                   </View>
 
-                  <View>
-                    <Text className="text-lg font-bold py-4">
-                      Normal - Legendado
-                    </Text>
+                  <View className="mb-4">
+                    <View className="flex-row justify-start gap-2 items-center">
+                      <Clapperboard
+                        className="text-primary opacity-80"
+                        size={24}
+                      />
+                      <Text className="text-base font-semibold py-4 text-primary">
+                        Normal - Legendado
+                      </Text>
+                    </View>
                     <View className="flex-row justify-start gap-4 flex-wrap">
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">15:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">16:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">17:00</Text>
                         </TouchableOpacity>
                       </View>
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="bg-primary-foreground px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
                           <Text className="text-primary">18:00</Text>
                         </TouchableOpacity>
                       </View>
