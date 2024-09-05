@@ -3,8 +3,20 @@ import * as React from "react";
 import { Text, ScrollView } from "react-native";
 import MovieCard from "~/components/MovieCard";
 import { MoviesComingSoon, MoviesDisplay } from "~/data/movies";
+import { getAllCinemas, getAllMovies } from "~/services";
+import { Movie } from "~/services/movies";
 
 export default function MoviesScreen() {
+
+  const [releasesMovies, setReleasesMovies] = React.useState<Movie[]>([]);
+  const [upcomingMovies, setUpcomingMovies] = React.useState<Movie[]>([]);
+
+  React.useEffect(() => {
+    const [upcoming, releases] = getAllMovies();
+    setReleasesMovies(releases);
+    setUpcomingMovies(upcoming);
+  }, []);
+
   return (
     <ScrollView className="flex-1 p-6">
       <Text className="text-2xl font-bold mb-4 text-primary">Em cartaz</Text>
@@ -14,7 +26,7 @@ export default function MoviesScreen() {
         className="mb-12"
         contentContainerStyle={{ paddingVertical: 10 }}
       >
-        {MoviesDisplay.map((movie, index) => (
+        {releasesMovies?.map((movie, index) => (
           <MovieCard key={index} movie={movie} />
         ))}
       </ScrollView>
@@ -27,7 +39,7 @@ export default function MoviesScreen() {
         className="mb-12"
         contentContainerStyle={{ paddingVertical: 10 }}
       >
-        {MoviesComingSoon.map((movie, index) => (
+        {upcomingMovies?.map((movie, index) => (
           <MovieCard key={index} movie={movie} />
         ))}
       </ScrollView>
