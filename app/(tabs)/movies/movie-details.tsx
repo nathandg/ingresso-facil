@@ -38,6 +38,9 @@ export default function MovieDetails() {
   const { idMovie } = useLocalSearchParams();
   const [cine, setCine] = useState<Cinema[] | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
+  const notComingSoon = MoviesDisplay.map((movie) => movie.id).includes(
+    Number(idMovie)
+  );
 
   const getDates = (numDays: number) => {
     const today = new Date();
@@ -67,11 +70,12 @@ export default function MovieDetails() {
     });
   };
 
-  const dates = getDates(7);
+  let dates = getDates(7);
 
   useEffect(() => {
+    let foundMovie = null;
     if (idMovie) {
-      const foundMovie = [...MoviesDisplay, ...MoviesComingSoon].find(
+      foundMovie = [...MoviesDisplay, ...MoviesComingSoon].find(
         (movie) => movie.id === Number(idMovie)
       );
       setMovie(foundMovie || null);
@@ -158,24 +162,25 @@ export default function MovieDetails() {
             className="bg-primary-foreground border-t border-b border-border mb-12"
           >
             <View className="flex-row gap-2">
-              {dates.map((date, index) => (
-                <TouchableOpacity
-                  key={index}
-                  className="p-4 items-center"
-                  style={{ elevation: 5 }}
-                  onPress={() => {
-                    setSelectedDate(date.originalDate);
-                    console.log(date);
-                  }}
-                >
-                  <Text className="mx-2 text-lg font-bold text-primary">
-                    {date.dayLabel}
-                  </Text>
-                  <Text className="mx-2 text-sm text-primary">
-                    {date.formattedDate}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              {notComingSoon &&
+                dates.map((date, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    className="p-4 items-center"
+                    style={{ elevation: 5 }}
+                    onPress={() => {
+                      setSelectedDate(date.originalDate);
+                      console.log(date);
+                    }}
+                  >
+                    <Text className="mx-2 text-lg font-bold text-primary">
+                      {date.dayLabel}
+                    </Text>
+                    <Text className="mx-2 text-sm text-primary">
+                      {date.formattedDate}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
             </View>
           </ScrollView>
 
