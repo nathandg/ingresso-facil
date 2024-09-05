@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { Text } from "~/components/ui/text";
 import { Ticket } from "~/lib/icons/Ticket";
@@ -7,24 +7,58 @@ import { Users2 } from "~/lib/icons/Users2";
 import { CalendarIcon } from "~/lib/icons/CalendarIcon";
 import { ChevronRightIcon } from "~/lib/icons/ChevronRightIcon";
 import { useRouter } from "expo-router";
-
-const tickets = [
-  { id: 1, movie: "Inception", date: "2023-07-15", seats: 2 },
-  { id: 2, movie: "The Dark Knight", date: "2023-07-20", seats: 3 },
-  { id: 3, movie: "Interstellar", date: "2023-07-25", seats: 1 },
-  { id: 4, movie: "Dunkirk", date: "2023-08-01", seats: 4 },
-  { id: 5, movie: "Tenet", date: "2023-08-05", seats: 2 },
-];
+import { User } from "firebase/auth";
+import { FIREBASE_AUTH, FIREBASE_DB } from "~/firebase-config";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function TicketsScreen() {
+  const [user, setUser] = useState<User | null>(null);
+  const [tickets, setTickets] = useState<any[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const currentUser = FIREBASE_AUTH.currentUser;
+    if (currentUser) {
+      setUser(currentUser);
+      const fetchTickets = async () => {
+        try {
+          const ticketsRef = collection(FIREBASE_DB, "tickets");
+          const q = query(ticketsRef, where("userId", "==", currentUser.uid));
+          const querySnapshot = await getDocs(q);
+
+          const fetchedTickets = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setTickets(fetchedTickets);
+        } catch (error) {
+          console.error("Error fetching tickets: ", error);
+        }
+      };
+
+      fetchTickets();
+    }
+  }, [user]);
 
   const renderTicket = (ticket: any) => {
     return (
       <TouchableOpacity
         key={ticket.id}
         className="bg-primary-foreground rounded-lg overflow-hidden my-3 mx-1 border border-border"
-        onPress={() => router.navigate("/(tabs)/profile/ticket")}
+        onPress={() => {
+          router.navigate({
+            pathname: "/(tabs)/profile/ticket",
+            params: {
+              idMovie: ticket.movieId,
+              date: ticket.date,
+              time: ticket.time,
+              cinema: ticket.cinema,
+              room: ticket.room,
+              seats: ticket.seats,
+            },
+          });
+        }}
       >
         <View className="p-4 border-b border-border">
           <View className="flex-row items-center justify-between">

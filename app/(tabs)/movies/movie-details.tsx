@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { MoviesComingSoon, MoviesDisplay } from "~/data/movies";
+import { cinesCity } from "~/data/cines";
 import { MovieCardProps } from "~/components/MovieCard";
 import {
   Image,
@@ -12,11 +13,61 @@ import {
 } from "react-native";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Clapperboard } from "~/lib/icons/Clapperboard";
+import { format } from "date-fns";
+
+interface Session {
+  movieId: number;
+  type: string;
+  times: string[];
+}
+
+interface Date {
+  sessions: Session[];
+  date: string;
+}
+
+interface Cinema {
+  dates: Date[];
+  id: number;
+  name: string;
+}
 
 export default function MovieDetails() {
   const router = useRouter();
   const [movie, setMovie] = useState<MovieCardProps["movie"] | null>(null);
   const { idMovie } = useLocalSearchParams();
+  const [cine, setCine] = useState<Cinema[] | null>(null);
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const getDates = (numDays: number) => {
+    const today = new Date();
+    return Array.from({ length: numDays }).map((_, index) => {
+      const currentDate = new Date(today);
+      currentDate.setDate(today.getDate() + index);
+
+      let dayLabel =
+        index === 0 ? "HOJE" : format(currentDate, "eee").toUpperCase();
+
+      const daysMap: { [key: string]: string } = {
+        SUN: "DOM",
+        MON: "SEG",
+        TUE: "TER",
+        WED: "QUA",
+        THU: "QUI",
+        FRI: "SEX",
+        SAT: "SÁB",
+      };
+
+      dayLabel = daysMap[dayLabel] || dayLabel;
+
+      const originalDate = format(currentDate, "yyyy-MM-dd");
+      const formattedDate = format(currentDate, "dd/MM");
+
+      return { dayLabel, formattedDate, originalDate };
+    });
+  };
+
+  const dates = getDates(7);
 
   useEffect(() => {
     if (idMovie) {
@@ -24,8 +75,40 @@ export default function MovieDetails() {
         (movie) => movie.id === Number(idMovie)
       );
       setMovie(foundMovie || null);
+
+      const movieCinemas = cinesCity
+        .filter((cinema) =>
+          cinema.dates.some((date) =>
+            date.sessions.some((session) => session.movieId === Number(idMovie))
+          )
+        )
+        .map((cinema) => ({
+          ...cinema,
+          dates: cinema.dates.map((date) => ({
+            ...date,
+            sessions: date.sessions.filter(
+              (session) => session.movieId === Number(idMovie)
+            ),
+          })),
+        }));
+
+      setCine(movieCinemas);
+      setSelectedDate(dates[0].originalDate);
     }
+
+    return () => {
+      setMovie(null);
+      setCine(null);
+    };
   }, [idMovie]);
+
+  const sessionsForSelectedDate = cine
+    ?.map((cinema) => ({
+      cinemaName: cinema.name,
+      sessions:
+        cinema.dates.find((date) => date.date === selectedDate)?.sessions || [],
+    }))
+    .filter((cinema) => cinema.sessions.length > 0);
 
   return (
     <ScrollView className="flex-1 w-full h-full">
@@ -75,184 +158,73 @@ export default function MovieDetails() {
             className="bg-primary-foreground border-t border-b border-border mb-12"
           >
             <View className="flex-row gap-2">
-              {Array.from({ length: 10 }).map((_, index) => (
+              {dates.map((date, index) => (
                 <TouchableOpacity
                   key={index}
                   className="p-4 items-center"
                   style={{ elevation: 5 }}
+                  onPress={() => {
+                    setSelectedDate(date.originalDate);
+                    console.log(date);
+                  }}
                 >
                   <Text className="mx-2 text-lg font-bold text-primary">
-                    HOJE
+                    {date.dayLabel}
                   </Text>
-                  <Text className="mx-2 text-sm text-primary">02/09</Text>
+                  <Text className="mx-2 text-sm text-primary">
+                    {date.formattedDate}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
           </ScrollView>
 
           <View className="w-full">
-            <Card className="bg-primary-foreground mx-2 mb-12 border border-border">
-              <CardHeader className="border-b border-border flex-row justify-center mb-4">
-                <Text className="text-lg font-semibold text-primary">
-                  Boulervard Shopping
-                </Text>
-              </CardHeader>
-              <CardContent className="flex-row justify-between">
-                <View className="flex-1 flex-col justify-start gap-4">
-                  <View className="mb-4">
-                    <View className="flex-row justify-start gap-2 items-center">
-                      <Clapperboard
-                        className="text-primary opacity-80"
-                        size={24}
-                      />
-                      <Text className="text-base font-semibold py-4 text-primary">
-                        Normal - Dublado
-                      </Text>
-                    </View>
-                    <View className="flex-row justify-start gap-4 flex-wrap">
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity
-                          className="px-5 py-2 rounded-lg border border-primary"
-                          onPress={() =>
-                            router.navigate("/(tabs)/movies/get-ticket")
-                          }
-                        >
-                          <Text className="text-primary">15:00</Text>
-                        </TouchableOpacity>
+            {sessionsForSelectedDate &&
+              sessionsForSelectedDate.length > 0 &&
+              sessionsForSelectedDate.map((cinema, idx) => (
+                <Card
+                  key={idx}
+                  className="bg-primary-foreground mx-2 mb-12 border border-border"
+                >
+                  <CardHeader className="border-b border-border flex-row justify-center mb-4">
+                    <Text className="text-lg font-semibold text-primary">
+                      {cinema.cinemaName}
+                    </Text>
+                  </CardHeader>
+                  <CardContent className="flex-col justify-between">
+                    {cinema.sessions.map((session, index) => (
+                      <View key={index} className="mb-4">
+                        <Text className="text-base font-semibold text-primary mb-2">
+                          {session.type}
+                        </Text>
+                        <View className="flex-row justify-start gap-4 flex-wrap">
+                          {session.times.map((time, idx) => (
+                            <TouchableOpacity
+                              key={idx}
+                              className="px-5 py-2 rounded-lg border border-primary"
+                              onPress={() => {
+                                router.navigate({
+                                  pathname: "/movies/get-ticket",
+                                  params: {
+                                    idMovie: movie?.id,
+                                    date: selectedDate,
+                                    time: time,
+                                    cinema: cinema.cinemaName,
+                                    room: "Sala 1",
+                                  },
+                                });
+                              }}
+                            >
+                              <Text className="text-primary">{time}</Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
                       </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">16:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">17:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">18:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View className="mb-4">
-                    <View className="flex-row justify-start gap-2 items-center">
-                      <Clapperboard
-                        className="text-primary opacity-80"
-                        size={24}
-                      />
-                      <Text className="text-base font-semibold py-4 text-primary">
-                        Normal - Legendado
-                      </Text>
-                    </View>
-                    <View className="flex-row justify-start gap-4 flex-wrap">
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">15:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">16:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">17:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">18:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-primary-foreground mx-2 mb-12 border border-border">
-              <CardHeader className="border-b border-border flex-row justify-center mb-4">
-                <Text className="text-lg font-semibold text-primary">
-                  Catuaí Shopping
-                </Text>
-              </CardHeader>
-              <CardContent className="flex-row justify-between">
-                <View className="flex-1 flex-col justify-start gap-4">
-                  <View className="mb-4">
-                    <View className="flex-row justify-start gap-2 items-center">
-                      <Clapperboard
-                        className="text-primary opacity-80"
-                        size={24}
-                      />
-                      <Text className="text-base font-semibold py-4 text-primary">
-                        Normal - Dublado
-                      </Text>
-                    </View>
-                    <View className="flex-row justify-start gap-4 flex-wrap">
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">15:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">16:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">17:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">18:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-
-                  <View className="mb-4">
-                    <View className="flex-row justify-start gap-2 items-center">
-                      <Clapperboard
-                        className="text-primary opacity-80"
-                        size={24}
-                      />
-                      <Text className="text-base font-semibold py-4 text-primary">
-                        Normal - Legendado
-                      </Text>
-                    </View>
-                    <View className="flex-row justify-start gap-4 flex-wrap">
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">15:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">16:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">17:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
-                          <Text className="text-primary">18:00</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </CardContent>
-            </Card>
+                    ))}
+                  </CardContent>
+                </Card>
+              ))}
           </View>
         </View>
       </View>
