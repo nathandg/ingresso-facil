@@ -9,12 +9,13 @@ export default function TabLayout() {
         options={{
           title: "Filmes",
           tabBarIcon: ({ color }) => <Film size={28} color={color} />,
+          unmountOnBlur: true,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Meu Perfil",
+          title: "Perfil",
           tabBarIcon: ({ color }) => <User2Icon size={28} color={color} />,
           unmountOnBlur: true,
         }}

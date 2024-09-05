@@ -9,9 +9,13 @@ import { useEffect, useState } from "react";
 import { Image, View } from "react-native";
 import { Badge } from "~/components/ui/badge";
 import { Text } from "~/components/ui/text";
-import QRCode from "react-native-qrcode-svg";
-import { useLocalSearchParams } from "expo-router";
+import { TouchableOpacity } from "react-native";
+import { Minus } from "~/lib/icons/Minus";
+import { Plus } from "~/lib/icons/Plus";
+import { router, useLocalSearchParams } from "expo-router";
 import { MoviesComingSoon, MoviesDisplay } from "~/data/movies";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { FIREBASE_AUTH, FIREBASE_DB } from "~/firebase-config";
 
 interface Ticket {
   movie: string;
@@ -26,7 +30,7 @@ interface Ticket {
 export default function GetTicketScreen() {
   const [ticket, setTicket] = useState<Ticket>();
   const [movie, setMovie] = useState<any>();
-  const { idMovie, date, time, cinema, room, seats } = useLocalSearchParams();
+  const { idMovie, date, time, cinema, room } = useLocalSearchParams();
 
   useEffect(() => {
     let foundMovie = null;
@@ -44,7 +48,7 @@ export default function GetTicketScreen() {
       time: Array.isArray(time) ? time[0] : time || "",
       cinema: Array.isArray(cinema) ? cinema[0] : cinema || "",
       room: Array.isArray(room) ? room[0] : room || "",
-      seats: Array.isArray(seats) ? Number(seats[0]) : Number(seats) || 1,
+      seats: 1,
     };
 
     setTicket(ticker);
@@ -52,6 +56,55 @@ export default function GetTicketScreen() {
     console.log(ticker);
   }, [idMovie]);
 
+  const [seats, setSeats] = useState(ticket?.seats || 1);
+
+  const incrementSeats = () => {
+    if (seats < 10) {
+      setSeats(seats + 1);
+    }
+  };
+
+  const decrementSeats = () => {
+    if (seats > 1) {
+      setSeats(seats - 1);
+    }
+  };
+
+  const confirmSeats = async () => {
+    const user = FIREBASE_AUTH.currentUser;
+
+    if (!user) {
+      console.error("Usuário não autenticado");
+      return;
+    }
+
+    const ticketData = {
+      movie: ticket?.movie,
+      gender: ticket?.gender,
+      date: ticket?.date,
+      time: ticket?.time,
+      room: ticket?.room,
+      cinema: ticket?.cinema,
+      seats: seats,
+      userId: user.uid,
+      confirmationTime: new Date().toISOString(),
+      movieId: idMovie,
+    };
+
+    try {
+      // Salva o ticket no ID do usuário
+      // const docRef = doc(FIREBASE_DB, "tickets", user.uid);
+      // await setDoc(ticketData);
+
+      const ticketsCollectionRef = collection(FIREBASE_DB, "tickets");
+      await addDoc(ticketsCollectionRef, ticketData); 
+
+      router.push("/(tabs)/profile/");
+      console.log("Ticket confirmado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao confirmar o ticket: ", error);
+    }
+  };
   return (
     <View className="flex-1 flex-col justify-between h-full">
       <View className="relative h-52 bg-gray-300">
@@ -96,21 +149,40 @@ export default function GetTicketScreen() {
           </View>
         </View>
 
-        <View className="flex-col gap-6 justify-center items-center">
-          <View className="flex-row gap-2 items-center">
-            <QRCode size={150} value={JSON.stringify(ticket)} />
+        <View className="gap-12 justify-center items-center">
+          <View className="flex-col gap-4 justify-center items-center">
+            <View className="flex-row gap-2 items-center">
+              <Users2 size={24} color={"#000"} />
+              <Text className="text-lg font-semibold text-primary">
+                Assentos
+              </Text>
+            </View>
+
+            <View className="flex-row items-center">
+              <TouchableOpacity
+                onPress={decrementSeats}
+                className="flex-row p-2 rounded-full border border-border"
+              >
+                <Minus size={24} className="text-primary opacity-80" />
+              </TouchableOpacity>
+              <Text className="text-lg font-bold text-primary w-12 text-center">
+                {seats}
+              </Text>
+              <TouchableOpacity
+                onPress={incrementSeats}
+                className="flex-row p-2 rounded-full border border-border"
+              >
+                <Plus size={24} className="text-primary opacity-80" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View className="flex-row gap-2 items-center">
-            <Users2 size={24} color={"#000"} />
-            <Text className="text-lg font-semibold text-primary">
-              {ticket?.seats}
-            </Text>
-          </View>
-
-          <Text className="text-base text-center text-muted-foreground">
-            Escaneie o QR code acima para validar seu ingresso
-          </Text>
+          <TouchableOpacity
+            onPress={() => confirmSeats()}
+            className="bg-primary p-4 rounded-md w-1/2"
+          >
+            <Text className="text-white text-center font-bold">Confirmar</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
