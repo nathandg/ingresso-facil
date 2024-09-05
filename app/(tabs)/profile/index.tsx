@@ -10,7 +10,7 @@ import { Ticket } from "~/lib/icons/Ticket";
 import { ArrowRight } from "~/lib/icons/ArrowRight";
 import { CircleHelp } from "~/lib/icons/CircleHelp";
 
-export default function Component() {
+export default function ProfileScreen() {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 

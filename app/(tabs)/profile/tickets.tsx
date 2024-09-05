@@ -6,6 +6,7 @@ import { FilmIcon } from "~/lib/icons/FilmIcon";
 import { Users2 } from "~/lib/icons/Users2";
 import { CalendarIcon } from "~/lib/icons/CalendarIcon";
 import { ChevronRightIcon } from "~/lib/icons/ChevronRightIcon";
+import { useRouter } from "expo-router";
 
 const tickets = [
   { id: 1, movie: "Inception", date: "2023-07-15", seats: 2 },
@@ -15,12 +16,15 @@ const tickets = [
   { id: 5, movie: "Tenet", date: "2023-08-05", seats: 2 },
 ];
 
-export default function Component() {
+export default function TicketsScreen() {
+  const router = useRouter();
+
   const renderTicket = (ticket: any) => {
     return (
       <TouchableOpacity
         key={ticket.id}
         className="bg-primary-foreground rounded-lg overflow-hidden my-3 mx-1 border border-border"
+        onPress={() => router.navigate("/(tabs)/profile/ticket")}
       >
         <View className="p-4 border-b border-border">
           <View className="flex-row items-center justify-between">

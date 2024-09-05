@@ -15,7 +15,7 @@ import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 import { FIREBASE_AUTH } from "~/firebase-config";
 
-export default function Page() {
+export default function SignInScreen() {
   const auth = FIREBASE_AUTH;
   const router = useRouter();
 
