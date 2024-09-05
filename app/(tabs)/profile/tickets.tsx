@@ -20,9 +20,9 @@ export default function Component() {
     return (
       <TouchableOpacity
         key={ticket.id}
-        className="bg-primary-foreground rounded-lg overflow-hidden shadow-sm my-3 mx-1 b"
+        className="bg-primary-foreground rounded-lg overflow-hidden my-3 mx-1 border border-border"
       >
-        <View className="p-4 border border-secondary">
+        <View className="p-4 border-b border-border">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center">
               <FilmIcon className="text-primary opacity-80" size={24} />
@@ -34,7 +34,7 @@ export default function Component() {
           </View>
         </View>
 
-        <View className="p-4 flex-row border border-secondary justify-between items-center">
+        <View className="p-4 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <CalendarIcon className="text-primary opacity-80" size={20} />
             <Text className="text-secondary-foreground ml-2">
@@ -54,7 +54,7 @@ export default function Component() {
 
   return (
     <View className="flex-1 mt-1 mx-4 space-y-4">
-      <View className="p-4 border-b border-secondary">
+      <View className="p-4 border-b border-border">
         <View className="flex-row items-center gap-2">
           <Ticket className="text-foreground" size={30} />
           <Text className="text-xl font-semibold text-foreground ml-2">

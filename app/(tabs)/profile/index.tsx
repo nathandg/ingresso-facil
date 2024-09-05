@@ -36,7 +36,7 @@ export default function Component() {
 
   return (
     <ScrollView className="flex-1">
-      <View className="bg-primary-foreground p-6 m-4 rounded-md flex flex-row gap-4 shadow-sm">
+      <View className="bg-primary-foreground p-6 m-4 rounded-md flex flex-row gap-4 border border-border">
         <UserCircle2 className="text-primary opacity-80" size={48} />
         <View>
           <Text className="text-2xl font-bold text-primary opacity-80">
@@ -46,9 +46,9 @@ export default function Component() {
         </View>
       </View>
 
-      <View className="mt-6 bg-primary-foreground rounded-lg mx-4 overflow-hidden shadow-sm">
+      <View className="mt-6 bg-primary-foreground rounded-lg mx-4 overflow-hidden border border-border">
         <TouchableOpacity
-          className="flex-row items-center justify-between p-4 border-b border-secondary"
+          className="flex-row items-center justify-between p-4 border-b border-border"
           onPress={() => router.navigate("/(tabs)/profile/tickets")}
         >
           <View className="flex-row items-center">
@@ -61,7 +61,7 @@ export default function Component() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="flex-row items-center justify-between p-4 border-b border-secondary"
+          className="flex-row items-center justify-between p-4 border-b border-border"
           onPress={handleHelp}
         >
           <View className="flex-row items-center">
