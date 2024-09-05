@@ -15,11 +15,10 @@ export interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = React.memo(({ movie }) => (
   <TouchableOpacity
-    className="rounded-lg p-4 h-96 bg-primary-foreground"
-    style={{ elevation: 5, marginHorizontal: 16 }}
-    activeOpacity={0.8}
+    className="mr-4 bg-white rounded-lg shadow-lg p-4 h-96"
     onPress={() => {
-      router.navigate({
+      // router.push(`/movies/movie-details?title=${movie.title}`);
+      router.push({
         pathname: "/movies/movie-details",
         params: { idMovie: movie.id },
       });
@@ -32,16 +31,16 @@ const MovieCard: React.FC<MovieCardProps> = React.memo(({ movie }) => (
     />
     <View className="flex h-36 justify-between">
       <View>
-        <Text className="text-xl font-bold w-36 text-primary" numberOfLines={2}>
+        <Text className="text-xl font-bold w-36" numberOfLines={2}>
           {movie.title}
         </Text>
-        <Text className="text-primary w-36" numberOfLines={1}>
+        <Text className="text-gray-700 w-36" numberOfLines={2}>
           {movie.genre}
         </Text>
       </View>
       <View>
-        <Text className="text-primary opacity-50">Duração: {movie.duration}</Text>
-        <Text className="text-primary opacity-50">
+        <Text className="text-gray-500">Duração: {movie.duration}</Text>
+        <Text className="text-gray-500">
           Classificação: {movie.classification}
         </Text>
       </View>

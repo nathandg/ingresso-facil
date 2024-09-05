@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect } from "react";
-import { ActivityIndicator, ImageBackground, View, Image } from "react-native";
+import { ActivityIndicator, ImageBackground, View } from "react-native";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -14,14 +14,16 @@ import {
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 import { FIREBASE_AUTH } from "~/firebase-config";
+import { useColorScheme } from "~/lib/useColorScheme";
 
-export default function SignInScreen() {
+export default function Page() {
   const auth = FIREBASE_AUTH;
   const router = useRouter();
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const { isDarkColorScheme } = useColorScheme();
 
   useEffect(() => {
     const checkAuthState = async () => {
@@ -41,6 +43,7 @@ export default function SignInScreen() {
 
     checkAuthState();
   }, [auth, router]);
+
 
   const onSignInPress = React.useCallback(async () => {
     try {
@@ -62,60 +65,60 @@ export default function SignInScreen() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#fff" />
       </View>
     );
   }
 
   return (
-    <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <Image
-            source={require("~/assets/images/logo.png")}
-            className="w-36 h-36 mx-auto mb-6"
-          />
-          <CardTitle className="text-2xl font-bold mb-3 text-center">
-            Entrar
-          </CardTitle>
-          <CardDescription className="text-center text-md">
-            Insira suas credencias do Ingresso Fácil para continuar
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 gap-5">
-          <Input
-            placeholder="email@ingresso.com"
-            value={emailAddress}
-            keyboardType="email-address"
-            onChangeText={setEmailAddress}
-            aria-labelledby="emailLabel"
-            autoCapitalize="none"
-            autoComplete="email"
-          />
+    <ImageBackground source={require('~/assets/images/logo.png')} >
+      <View className="min-h-screen flex items-center justify-center py-12 px-10 sm:px-6 lg:px-8">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold mb-3 text-center">
+              Entrar
+            </CardTitle>
+            <CardDescription className="text-center text-md">
+              Insira suas credencias do Ingresso Fácil para continuar
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 gap-5">
+            <Input
+              className={isDarkColorScheme ? "color-white" : ""}
+              placeholder="email@ingresso.com"
+              value={emailAddress}
+              keyboardType="email-address"
+              onChangeText={setEmailAddress}
+              aria-labelledby="emailLabel"
+              autoCapitalize="none"
+              autoComplete="email"
+            />
 
-          <Input
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            aria-labelledby="passwordLabel"
-            autoCapitalize="none"
-            autoComplete="password"
-          />
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
-          <Button className="w-full" variant="default" onPress={onSignInPress}>
-            <Text>Acessar</Text>
-          </Button>
-          <Button
-            className="w-full"
-            variant="link"
-            onPress={() => router.push("/sign-up")}
-          >
-            <Text>Não tem uma conta? Registre-se</Text>
-          </Button>
-        </CardFooter>
-      </Card>
-    </View>
+            <Input
+              className={isDarkColorScheme ? "color-white" : ""}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              aria-labelledby="passwordLabel"
+              autoCapitalize="none"
+              autoComplete="password"
+            />
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-4 mx-2 gap-4">
+            <Button className="w-full" variant="default" onPress={onSignInPress}>
+              <Text>Acessar</Text>
+            </Button>
+            <Button
+              className="w-full"
+              variant="link"
+              onPress={() => router.push("/sign-up")}
+            >
+              <Text>Não tem uma conta? Registre-se</Text>
+            </Button>
+          </CardFooter>
+        </Card>
+      </View>
+    </ImageBackground>
   );
 }
