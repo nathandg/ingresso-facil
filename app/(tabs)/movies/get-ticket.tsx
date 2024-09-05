@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 import { Image, View } from "react-native";
 import { Badge } from "~/components/ui/badge";
 import { Text } from "~/components/ui/text";
-import QRCode from "react-native-qrcode-svg";
+import { TouchableOpacity } from "react-native";
+import { Minus } from "~/lib/icons/Minus";
+import { Plus } from "~/lib/icons/Plus";
 
 interface Ticket {
   movie: string;
@@ -35,6 +37,20 @@ export default function GetTicketScreen() {
       seats: 2,
     });
   }, []);
+
+  const [seats, setSeats] = useState(ticket?.seats || 1);
+
+  const incrementSeats = () => {
+    if (seats < 10) {
+      setSeats(seats + 1);
+    }
+  };
+
+  const decrementSeats = () => {
+    if (seats > 1) {
+      setSeats(seats - 1);
+    }
+  };
 
   return (
     <View className="flex-1 flex-col justify-between h-full">
@@ -80,21 +96,42 @@ export default function GetTicketScreen() {
           </View>
         </View>
 
-        <View className="flex-col gap-6 justify-center items-center">
-          <View className="flex-row gap-2 items-center">
-            <QRCode size={150} value={JSON.stringify(ticket)} />
+        <View className="gap-12 justify-center items-center">
+          <View className="flex-col gap-4 justify-center items-center">
+            <View className="flex-row gap-2 items-center">
+              <Users2 size={24} color={"#000"} />
+              <Text className="text-lg font-semibold text-primary">
+                Assentos
+              </Text>
+            </View>
+
+            <View className="flex-row items-center">
+              <TouchableOpacity
+                onPress={decrementSeats}
+                className="flex-row p-2 rounded-full border border-border"
+              >
+                <Minus size={24} className="text-primary opacity-80" />
+              </TouchableOpacity>
+              <Text className="text-lg font-bold text-primary w-12 text-center">
+                {seats}
+              </Text>
+              <TouchableOpacity
+                onPress={incrementSeats}
+                className="flex-row p-2 rounded-full border border-border"
+              >
+                <Plus size={24} className="text-primary opacity-80" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View className="flex-row gap-2 items-center">
-            <Users2 size={24} color={"#000"} />
-            <Text className="text-lg font-semibold text-primary">
-              {ticket?.seats}
-            </Text>
-          </View>
-
-          <Text className="text-base text-center text-muted-foreground">
-            Escaneie o QR code acima para validar seu ingresso
-          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              alert("Quantidade de assentos selecionada: " + seats)
+            }
+            className="bg-primary p-4 rounded-md w-1/2"
+          >
+            <Text className="text-white text-center font-bold">Confirmar</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

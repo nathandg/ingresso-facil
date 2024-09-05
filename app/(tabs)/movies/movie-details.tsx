@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { MoviesComingSoon, MoviesDisplay } from "~/data/movies";
 import { MovieCardProps } from "~/components/MovieCard";
 import {
@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Clapperboard } from "~/lib/icons/Clapperboard";
 
 export default function MovieDetails() {
+  const router = useRouter();
   const [movie, setMovie] = useState<MovieCardProps["movie"] | null>(null);
   const { idMovie } = useLocalSearchParams();
 
@@ -110,7 +111,12 @@ export default function MovieDetails() {
                     </View>
                     <View className="flex-row justify-start gap-4 flex-wrap">
                       <View className="flex-row justify-start gap-2">
-                        <TouchableOpacity className="px-5 py-2 rounded-lg border border-primary">
+                        <TouchableOpacity
+                          className="px-5 py-2 rounded-lg border border-primary"
+                          onPress={() =>
+                            router.navigate("/(tabs)/movies/get-ticket")
+                          }
+                        >
                           <Text className="text-primary">15:00</Text>
                         </TouchableOpacity>
                       </View>
