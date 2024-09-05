@@ -1,11 +1,14 @@
 import { useRouter } from "expo-router";
 import { User } from "firebase/auth";
-import { ArrowRight, CircleHelp, LogOut, Ticket } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, ScrollView, Linking } from "react-native";
 import { Text } from "~/components/ui/text";
 import { FIREBASE_AUTH } from "~/firebase-config";
 import { UserCircle2 } from "~/lib/icons/UserCircle2";
+import { LogOut } from "lucide-react-native";
+import { Ticket } from "~/lib/icons/Ticket";
+import { ArrowRight } from "~/lib/icons/ArrowRight";
+import { CircleHelp } from "~/lib/icons/CircleHelp";
 
 export default function Component() {
   const [user, setUser] = useState<User | null>(null);
@@ -34,9 +37,9 @@ export default function Component() {
   return (
     <ScrollView className="flex-1">
       <View className="bg-primary-foreground p-6 m-4 rounded-md flex flex-row gap-4 shadow-sm">
-        <UserCircle2 className="text-primary" size={48} />
+        <UserCircle2 className="text-primary opacity-80" size={48} />
         <View>
-          <Text className="text-2xl font-bold text-primary">
+          <Text className="text-2xl font-bold text-primary opacity-80">
             {user?.email?.split("@")[0]}
           </Text>
           <Text className="text-primary opacity-80">{user?.email}</Text>
@@ -49,12 +52,12 @@ export default function Component() {
           onPress={() => router.navigate("/(tabs)/profile/tickets")}
         >
           <View className="flex-row items-center">
-            <Ticket size={24} color="#9CA3AF" />
+            <Ticket size={24} className="text-primary opacity-80" />
             <Text className="text-primary opacity-80 ml-3 font-semibold">
               Ingressos
             </Text>
           </View>
-          <ArrowRight size={20} color="#9CA3AF" />
+          <ArrowRight size={20} className="text-primary opacity-80" />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -62,12 +65,12 @@ export default function Component() {
           onPress={handleHelp}
         >
           <View className="flex-row items-center">
-            <CircleHelp size={24} color="#9CA3AF" />
+            <CircleHelp size={24} className="text-primary opacity-80" />
             <Text className="text-primary ml-3 font-semibold opacity-80">
               Ajuda
             </Text>
           </View>
-          <ArrowRight size={20} color="#9CA3AF" />
+          <ArrowRight size={20} className="text-primary opacity-80" />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -78,7 +81,7 @@ export default function Component() {
             <LogOut size={24} color="#EF4444" />
             <Text className="text-red-500 ml-3 font-semibold">Sair</Text>
           </View>
-          <ArrowRight size={20} color="#9CA3AF" />
+          <ArrowRight size={20} className="text-primary opacity-80" />
         </TouchableOpacity>
       </View>
 

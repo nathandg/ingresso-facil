@@ -8,7 +8,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
       <View style={styles.container}>
-        <MaterialIcons name="error-outline" size={80} color="red" />
+        <MaterialIcons name="error-outline" size={80} color="#EF4444" />
         <Text style={styles.title}>Página não encontrada</Text>
         <Text style={styles.message}>
           Desculpe, a página que você está procurando não existe.

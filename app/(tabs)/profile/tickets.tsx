@@ -1,11 +1,11 @@
 import React from "react";
-import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import { Text } from "~/components/ui/text";
-import { TicketIcon } from "~/lib/icons/TicketIcon";
+import { Ticket } from "~/lib/icons/Ticket";
 import { FilmIcon } from "~/lib/icons/FilmIcon";
 import { Users2 } from "~/lib/icons/Users2";
 import { CalendarIcon } from "~/lib/icons/CalendarIcon";
-import { ChevronRightIcon } from "lucide-react-native";
+import { ChevronRightIcon } from "~/lib/icons/ChevronRightIcon";
 
 const tickets = [
   { id: 1, movie: "Inception", date: "2023-07-15", seats: 2 },
@@ -25,33 +25,24 @@ export default function Component() {
         <View className="p-4 border border-secondary">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center">
-              <FilmIcon
-                className="text-secondary-foreground opacity-80"
-                size={24}
-              />
+              <FilmIcon className="text-primary opacity-80" size={24} />
               <Text className="text-lg font-semibold text-secondary-foreground ml-2 opacity-80">
                 {ticket.movie}
               </Text>
             </View>
-            <ChevronRightIcon size={20} color="#9CA3AF" />
+            <ChevronRightIcon size={20} className="text-primary opacity-80" />
           </View>
         </View>
 
         <View className="p-4 flex-row border border-secondary justify-between items-center">
           <View className="flex-row items-center">
-            <CalendarIcon
-              className="text-secondary-foreground opacity-80"
-              size={20}
-            />
+            <CalendarIcon className="text-primary opacity-80" size={20} />
             <Text className="text-secondary-foreground ml-2">
               {ticket.date}
             </Text>
           </View>
           <View className="flex-row items-center">
-            <Users2
-              className="text-secondary-foreground opacity-80"
-              size={20}
-            />
+            <Users2 className="text-primary opacity-80" size={20} />
             <Text className="text-secondary-foreground ml-2 opacity-80">
               {ticket.seats}
             </Text>
@@ -65,7 +56,7 @@ export default function Component() {
     <View className="flex-1 mt-1 mx-4 space-y-4">
       <View className="p-4 border-b border-secondary">
         <View className="flex-row items-center gap-2">
-          <TicketIcon className="text-foreground" size={30} />
+          <Ticket className="text-foreground" size={30} />
           <Text className="text-xl font-semibold text-foreground ml-2">
             Ingressos
           </Text>
